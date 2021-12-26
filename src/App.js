@@ -1,9 +1,9 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { SummaryForm } from "./pages/summary/SummaryForm";
+import { BootstrapSummaryForm, SummaryForm } from "./pages/summary/SummaryForm";
 
 function App() {
-  return <SummaryForm />;
+  return <BootstrapSummaryForm />;
 }
 
 export default App;

@@ -1,8 +1,8 @@
 import { render, fireEvent, screen } from "@testing-library/react";
-import { SummaryForm } from "../SummaryForm";
+import { SummaryForm, BootstrapSummaryForm } from "../SummaryForm";
 
 const getTestingElements = () => {
-  render(<SummaryForm />);
+  render(<BootstrapSummaryForm />);
   const summitButton = screen.getByRole("button", { name: /confirm order/i });
   const termCheckbox = screen.getByRole("checkbox", {
     name: /terms and conditions/i,
