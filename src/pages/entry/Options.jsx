@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
+import { AlertBanner } from "../common/AlertBanner";
 import { ScoopOption } from "./ScoopOption";
 import { ToppingOption } from "./ToppingOption";
 
 export const Options = ({ optionType }) => {
   const [data, setData] = useState([]);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     (async function getDataFromSV() {
@@ -14,10 +16,13 @@ export const Options = ({ optionType }) => {
         setData(result.data);
       } catch (err) {
         //Error handling
+        setError(true);
         console.log(data);
       }
     })();
   }, [optionType]);
+
+  if (error) return <AlertBanner />;
 
   //   const OptionItem = optionType === "scoops" ? <ScoopOption /> : null; //wrongly defined
   const OptionItem = optionType === "scoops" ? ScoopOption : ToppingOption;
