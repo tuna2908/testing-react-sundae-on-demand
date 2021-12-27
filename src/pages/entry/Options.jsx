@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
 import { ScoopOption } from "./ScoopOption";
+import { ToppingOption } from "./ToppingOption";
 
 export const Options = ({ optionType }) => {
   const [data, setData] = useState([]);
@@ -19,7 +20,7 @@ export const Options = ({ optionType }) => {
   }, [optionType]);
 
   //   const OptionItem = optionType === "scoops" ? <ScoopOption /> : null; //wrongly defined
-  const OptionItem = optionType === "scoops" ? ScoopOption : null; //wrongly defined
+  const OptionItem = optionType === "scoops" ? ScoopOption : ToppingOption;
 
   const MappedOptionItems = data.map((option) => (
     <OptionItem
