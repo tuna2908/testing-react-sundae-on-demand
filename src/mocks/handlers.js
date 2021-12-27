@@ -13,7 +13,7 @@ const Scoops = [
 ];
 
 export const handlers = [
-  rest.get("/login", (req, res, ctx) => {
+  rest.get("http://localhost:3030/scoops", (req, res, ctx) => {
     return res(ctx.json(Scoops));
   }),
 ];
