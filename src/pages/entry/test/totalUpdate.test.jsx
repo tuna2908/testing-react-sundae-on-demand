@@ -1,10 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { OrderDetailsProvider } from '../../../contexts/OrderDetails';
 import { Options } from '../Options';
 
 //try to test smallest unit of component possible!
 test('update scoop subtotal when scoop changed!', async () => {
-  render(<Options optionType={'scoops'} />);
+  //add wrapper option to render function - wrapper can be ReduxProvider, Router, etc.
+  render(<Options optionType={'scoops'} />, { wrapper: OrderDetailsProvider });
 
   //test subtotal starts out value at $0.00
   const scoopsSubtotal = screen.getByText('Scoops total: $', { exact: false }); //partial match for reuseable purpose

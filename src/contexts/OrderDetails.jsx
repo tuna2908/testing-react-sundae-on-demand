@@ -4,6 +4,13 @@ import { PRICE_PER_ITEM } from '../constants';
 const OrderDetails = createContext(null);
 
 //create custom hook to check inside a provider
+const formatCurrency = (amount) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+  }).format(amount);
+};
 
 export const useOrderDetails = () => {
   const context = useContext(OrderDetails);
@@ -29,10 +36,12 @@ export const OrderDetailsProvider = (props) => {
     toppings: new Map(),
   });
 
+  const zeroCurrency = formatCurrency(0);
+  //contrl + D, pay the deal
   const [totals, setTotal] = useState({
-    scoops: 0,
-    toppings: 0,
-    grandTotal: 0,
+    scoops: zeroCurrency,
+    toppings: zeroCurrency,
+    grandTotal: zeroCurrency,
   });
 
   useEffect(() => {
@@ -42,9 +51,9 @@ export const OrderDetailsProvider = (props) => {
     const grandTotal = scoopsSubtotal + toppingsSubtotal;
 
     setTotal({
-      scoops: scoopsSubtotal,
-      toppings: toppingsSubtotal,
-      grandTotal,
+      scoops: formatCurrency(scoopsSubtotal),
+      toppings: formatCurrency(toppingsSubtotal),
+      grandTotal: formatCurrency(grandTotal),
     });
   }, [optionCounts]);
 

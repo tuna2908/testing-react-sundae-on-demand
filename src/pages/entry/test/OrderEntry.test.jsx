@@ -1,24 +1,25 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import { rest } from "msw";
-import { server } from "../../../mocks/server.js";
-import { OrderEntry } from "../OrderEntry.jsx";
+import { render, screen, waitFor } from '@testing-library/react';
+import { rest } from 'msw';
+import { OrderDetailsProvider } from '../../../contexts/OrderDetails.jsx';
+import { server } from '../../../mocks/server.js';
+import { OrderEntry } from '../OrderEntry.jsx';
 
-test("error response from server", async () => {
+test('error response from server', async () => {
   server.resetHandlers(
-    rest.get("http://localhost:3030/scoops", (req, res, ctx) =>
+    rest.get('http://localhost:3030/scoops', (req, res, ctx) =>
       res(ctx.status(500))
     ),
-    rest.get("http://localhost:3030/toppings", (req, res, ctx) =>
+    rest.get('http://localhost:3030/toppings', (req, res, ctx) =>
       res(ctx.status(500))
     )
   );
 
-  render(<OrderEntry />);
+  render(<OrderEntry />, { wrapper: OrderDetailsProvider });
 
   await waitFor(async () => {
     //get all alert (2)
     //{name} cause err
-    const alertFrmServer = await screen.findAllByRole("alert");
+    const alertFrmServer = await screen.findAllByRole('alert');
     //check alert lenth
     await expect(alertFrmServer).toHaveLength(2);
   });
