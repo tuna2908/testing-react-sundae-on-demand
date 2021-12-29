@@ -1,4 +1,10 @@
-import { render, screen, waitFor } from '@testing-library/react';
+// import { render, screen, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+} from '../../../test-utils/testing-library-utils';
+
 import { rest } from 'msw';
 import { OrderDetailsProvider } from '../../../contexts/OrderDetails.jsx';
 import { server } from '../../../mocks/server.js';

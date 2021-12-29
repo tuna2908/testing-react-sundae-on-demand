@@ -1,10 +1,11 @@
-import { render, screen } from '@testing-library/react';
+// import { render, screen } from '@testing-library/react';
+import { render, screen } from '../../../test-utils/testing-library-utils';
 import { OrderDetailsProvider } from '../../../contexts/OrderDetails';
 
 import { Options } from '../Options';
 
 test('display image for each scroop option from the servier', async () => {
-  render(<Options optionType={'scoops'} />, { wrapper: OrderDetailsProvider });
+  render(<Options optionType={'scoops'} />);
 
   //find images
   //   const scoopImages = screen.getAllByRole("img", { name: /scoop$/i });     //cannot use in async comp render
@@ -18,9 +19,7 @@ test('display image for each scroop option from the servier', async () => {
 });
 
 test('display image for each topping option from the servier', async () => {
-  render(<Options optionType={'toppings'} />, {
-    wrapper: OrderDetailsProvider,
-  });
+  render(<Options optionType={'toppings'} />);
 
   //find images
   const scoopImages = await screen.findAllByRole('img', { name: /topping$/i }); //img not image
