@@ -2,6 +2,7 @@ import { render, screen } from '../../../test-utils/testing-library-utils';
 import userEvent from '@testing-library/user-event';
 import { OrderDetailsProvider } from '../../../contexts/OrderDetails';
 import { Options } from '../Options';
+import { OrderEntry } from '../OrderEntry';
 
 //try to test smallest unit of component possible!
 test('update scoop subtotal when scoop changed!', async () => {
@@ -54,12 +55,103 @@ test('update topping subtotal when topping changed!', async () => {
   const mamCB = await screen.findByRole('checkbox', {
     name: 'M&Ms',
   });
-  userEvent.click(cherriesCB);
+  userEvent.click(mamCB);
   expect(toppingsSubtotal).toHaveTextContent('3.00');
 
-  userEvent.click(mamCB);
+  userEvent.click(cherriesCB);
   expect(toppingsSubtotal).toHaveTextContent('1.50');
 
-  userEvent.click(cherriesCB);
+  userEvent.click(mamCB);
   expect(toppingsSubtotal).toHaveTextContent('0.00');
+});
+
+describe('grand total', () => {
+  test(' grand total starts at $0.00', async () => {
+    render(<OrderEntry />); //test error: test finished but async render still occurs 'cause api call to server
+    /**
+     * @solution1
+     * skip auto clean up and clean up by manual=> not recommend
+     * @solution2
+     * mock useEffect => so that useEffect never happens in the test => code more intertwine with the tests => not recommended
+     * @solution3
+     * add await at the end => not recommended
+     * @solution4
+     * move the test to tests that have await state changes => OK
+     */
+    const labelGrandTotal = screen.getByRole('heading', {
+      name: /grand total: \$/i,
+    });
+    expect(labelGrandTotal).toHaveTextContent('0.00');
+  });
+
+  test(' grand total updates properly if scoop is added first', async () => {
+    render(<OrderEntry />);
+
+    const inputScoop = await screen.findByRole('spinbutton', {
+      name: 'Vanilla',
+    });
+    const cbTopping = await screen.findByRole('checkbox', {
+      name: 'Cherries',
+    });
+    const labelGrandTotal = screen.getByRole('heading', {
+      name: /grand total: \$/i,
+    });
+
+    userEvent.clear(inputScoop);
+    userEvent.type(inputScoop, '1');
+    expect(labelGrandTotal).toHaveTextContent('2.00');
+
+    userEvent.click(cbTopping);
+    expect(labelGrandTotal).toHaveTextContent('3.50');
+  });
+
+  test(' grand total updates properly if toppping is added first', async () => {
+    render(<OrderEntry />);
+
+    const inputScoop = await screen.findByRole('spinbutton', {
+      name: 'Chocolate',
+    });
+
+    const cbTopping = await screen.findByRole('checkbox', {
+      name: 'M&Ms',
+    });
+    const labelGrandTotal = screen.getByRole('heading', {
+      name: /grand total: \$/i,
+    });
+
+    userEvent.click(cbTopping);
+    expect(labelGrandTotal).toHaveTextContent('1.50');
+
+    userEvent.clear(inputScoop);
+    userEvent.type(inputScoop, '1');
+    expect(labelGrandTotal).toHaveTextContent('3.50');
+  });
+
+  test(' grand total updates properly if item is removed', async () => {
+    render(<OrderEntry />);
+
+    const inputScoop = await screen.findByRole('spinbutton', {
+      name: 'Chocolate',
+    });
+    const cbTopping = await screen.findByRole('checkbox', {
+      name: 'M&Ms',
+    });
+    const labelGrandTotal = screen.getByRole('heading', {
+      name: /grand total: \$/i,
+    });
+
+    userEvent.click(cbTopping);
+    expect(labelGrandTotal).toHaveTextContent('1.50');
+
+    userEvent.clear(inputScoop);
+    userEvent.type(inputScoop, '1');
+    expect(labelGrandTotal).toHaveTextContent('3.50');
+
+    userEvent.clear(inputScoop);
+    userEvent.type(inputScoop, '0');
+    expect(labelGrandTotal).toHaveTextContent('1.50');
+
+    userEvent.click(cbTopping);
+    expect(labelGrandTotal).toHaveTextContent('0.00');
+  });
 });

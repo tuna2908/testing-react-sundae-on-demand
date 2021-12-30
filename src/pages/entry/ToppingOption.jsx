@@ -13,16 +13,10 @@ export const ToppingOption = ({ imagePath, name, updateItemCount }) => {
         alt={`${name} topping`}
       />
       <Form.Group
-        controlId={`${name}-count`}
-        as={Row}
+        controlId={`${name}-topping-checkbox`}
         style={{ marginTop: 10 }}
       >
-        <Form.Label column xs="6" style={{ textAlign: 'right' }}>
-          {name}
-        </Form.Label>
-        <Col xs="5" style={{ textAlign: 'left' }}>
-          <Form.Check type="checkbox" onChange={handleCBClick} label={name} />
-        </Col>
+        <Form.Check type="checkbox" onChange={handleCBClick} label={name} />
       </Form.Group>
     </Col>
   );
