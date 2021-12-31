@@ -4,28 +4,28 @@ import {
   screen,
   waitForElementToBeRemoved,
   waitFor,
-} from "@testing-library/react";
-import { SummaryForm, BootstrapSummaryForm } from "../SummaryForm";
-import userEvent from "@testing-library/user-event";
+} from '@testing-library/react';
+import { SummaryForm, BootstrapSummaryForm } from '../SummaryForm';
+import userEvent from '@testing-library/user-event';
 
 const getTestingElements = () => {
   render(<BootstrapSummaryForm />);
-  const summitButton = screen.getByRole("button", { name: /confirm order/i });
-  const termCheckbox = screen.getByRole("checkbox", {
+  const summitButton = screen.getByRole('button', { name: /confirm order/i });
+  const termCheckbox = screen.getByRole('checkbox', {
     name: /terms and conditions/i,
   });
   const termSpan = screen.getByText(/terms and conditions/i);
   return { summitButton, termCheckbox, termSpan };
 };
 
-test("Initial state of Checkbox and Button", () => {
+test('Initial state of Checkbox and Button', () => {
   const { summitButton, termCheckbox } = getTestingElements();
 
   expect(termCheckbox).not.toBeChecked();
   expect(summitButton).toBeDisabled();
 });
 
-test("Disable button works!", () => {
+test('Disable button works!', () => {
   const { summitButton, termCheckbox } = getTestingElements();
 
   //click checkbox
@@ -38,7 +38,7 @@ test("Disable button works!", () => {
   expect(summitButton).toBeDisabled();
 });
 
-test("USER-EVENT Disable button works!", () => {
+test('USER-EVENT Disable button works!', () => {
   const { summitButton, termCheckbox } = getTestingElements();
 
   //click checkbox
@@ -51,7 +51,7 @@ test("USER-EVENT Disable button works!", () => {
   expect(summitButton).toBeDisabled();
 });
 
-test("popover responds to hover", async () => {
+test('popover responds to hover', async () => {
   const { termSpan } = getTestingElements();
 
   const nullPopover = screen.queryByText(

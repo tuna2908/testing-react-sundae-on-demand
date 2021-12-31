@@ -1,5 +1,8 @@
-import { useState } from "react";
-import { Button, Form, OverlayTrigger, Popover } from "react-bootstrap";
+import axios from 'axios';
+import { useState } from 'react';
+import { Form, OverlayTrigger, Popover } from 'react-bootstrap';
+import { APP_PHASE } from '../../constants';
+import { OrderSummary } from './OrderSummary';
 
 export const SummaryForm = () => {
   const [cbStatus, setCBStatus] = useState(false);
@@ -26,25 +29,36 @@ const popover = (
   </Popover>
 );
 
-export const BootstrapSummaryForm = () => {
+export const BootstrapSummaryForm = ({ setAppPhase, setOrderNumber }) => {
   const [cbStatus, setCBStatus] = useState(false);
   const handleCBClick = (e) => setCBStatus(e.target.checked);
   //wanna add label to checkbox => add this one: <Form.Group controlId="terms-and-conditions">
   //placement="right" is important
+  const handleSubmit = async () => {
+    const result = await axios.post(`http://localhost:3030/order`);
+    setOrderNumber(result.data.orderNumber);
+    setAppPhase(APP_PHASE.COMPLETE);
+  };
+
   const Label = (
     <span>
       I agree to
       <OverlayTrigger placement="right" overlay={popover}>
-        <span style={{ color: "blue" }}>Terms and Conditions</span>
+        <span style={{ color: 'blue' }}>Terms and Conditions</span>
       </OverlayTrigger>
     </span>
   );
   return (
-    <Form>
-      <Form.Group controlId="terms-and-conditions">
-        <Form.Check type="checkbox" onChange={handleCBClick} label={Label} />
-      </Form.Group>
-      <button disabled={!cbStatus}>Confirm order</button>
-    </Form>
+    <>
+      <OrderSummary />
+      <Form>
+        <Form.Group controlId="terms-and-conditions">
+          <Form.Check type="checkbox" onChange={handleCBClick} label={Label} />
+        </Form.Group>
+      </Form>
+      <button disabled={!cbStatus} onClick={handleSubmit}>
+        Confirm order
+      </button>
+    </>
   );
 };
