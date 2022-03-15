@@ -23,7 +23,7 @@ test('error response from server', async () => {
   render(<OrderEntry />, { wrapper: OrderDetailsProvider });
 
   await waitFor(async () => {
-    //get all alert (2)
+    //get all alert (2) because you have 2 server calls
     //{name} cause err
     const alertFrmServer = await screen.findAllByRole('alert');
     //check alert lenth
