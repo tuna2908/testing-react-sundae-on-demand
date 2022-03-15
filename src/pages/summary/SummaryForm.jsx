@@ -1,8 +1,9 @@
-import axios from 'axios';
-import { useState } from 'react';
-import { Form, OverlayTrigger, Popover } from 'react-bootstrap';
-import { APP_PHASE } from '../../constants';
-import { OrderSummary } from './OrderSummary';
+import axios from "axios";
+import { useState } from "react";
+import { Form, OverlayTrigger, Popover } from "react-bootstrap";
+import { APP_PHASE } from "../../constants";
+import { useOrderDetails } from "../../contexts/OrderDetails";
+import { OrderSummary } from "./OrderSummary";
 
 export const SummaryForm = () => {
   const [cbStatus, setCBStatus] = useState(false);
@@ -32,11 +33,13 @@ const popover = (
 export const BootstrapSummaryForm = ({ setAppPhase, setOrderNumber }) => {
   const [cbStatus, setCBStatus] = useState(false);
   const handleCBClick = (e) => setCBStatus(e.target.checked);
+  const [test, test2, resetValue] = useOrderDetails();
   //wanna add label to checkbox => add this one: <Form.Group controlId="terms-and-conditions">
   //placement="right" is important
   const handleSubmit = async () => {
     const result = await axios.post(`http://localhost:3030/order`);
     setOrderNumber(result.data.orderNumber);
+    resetValue();
     setAppPhase(APP_PHASE.COMPLETE);
   };
 
@@ -44,7 +47,7 @@ export const BootstrapSummaryForm = ({ setAppPhase, setOrderNumber }) => {
     <span>
       I agree to
       <OverlayTrigger placement="right" overlay={popover}>
-        <span style={{ color: 'blue' }}>Terms and Conditions</span>
+        <span style={{ color: "blue" }}>Terms and Conditions</span>
       </OverlayTrigger>
     </span>
   );
